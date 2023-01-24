@@ -15,10 +15,16 @@ const restApiExists = async (serverless, settings) => {
   if (configuredRestApiId) {
     return true;
   }
-  const resource = serverless.service.provider.compiledCloudFormationTemplate.Resources['ApiGatewayRestApi'];
+  let resource = serverless.service.provider.compiledCloudFormationTemplate.Resources['ApiGatewayRestApi'];
   if (resource) {
     return true;
   }
+
+  resource = serverless.service.provider.compiledCloudFormationTemplate.Resources['APINestedStack'];
+  if (resource) {
+    return true;
+  }
+
 
   const stack = await getAlreadyDeployedStack(serverless, settings);
   if (stack) {
